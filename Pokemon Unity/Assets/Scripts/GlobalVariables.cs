@@ -7,6 +7,8 @@ public class GlobalVariables : MonoBehaviour
 {
     public static GlobalVariables global;
 
+	public static int MAX_BAG_PM_AMOUNT = 6; 
+
     public Vector3 playerPosition;
     public int playerDirection;
     public bool playerForwardOnLoad;
@@ -91,6 +93,7 @@ public class GlobalVariables : MonoBehaviour
         SaveData.currentSave.playerName = "Gold";
         SaveData.currentSave.playerID = 29482;
         SaveData.currentSave.isMale = true;
+		SaveData.currentSave.mapName = "JenShinTown";
 
         SaveData.currentSave.playerOutfit = "hgss";
 
