@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Security.AccessControl;
 using System;
+using UnityEngine.SceneManagement;
 
 public class MainMenuHandlerV2 : MonoBehaviour {
 	private short MAX_FILE_AMOUNT = 3;
@@ -94,6 +95,7 @@ public class MainMenuHandlerV2 : MonoBehaviour {
 			m_FileData.SetActive (false);
 			m_ContinueBtn.SetActive (false);
 			m_SelectedBtn = EButtonType.eBT_NewGame;
+			UpdateBtn (m_SelectedBtn);
 		} else {
 			for (int i = m_FileCount ; i < MAX_FILE_AMOUNT; i++) {
 				m_File [i].enabled = false;
@@ -111,6 +113,31 @@ public class MainMenuHandlerV2 : MonoBehaviour {
 		running = true;
 
 		while (running) {
+			if (Input.GetButtonDown ("Select")) {
+				StartCoroutine (ButtonSelect (m_SelectedBtn));
+			} else if (Input.GetKeyDown (KeyCode.Delete)) {
+				//delete save file
+				float time = Time.time;
+				bool released = false;
+				Debug.Log ("Save " + (m_SelectedFile + 1) + " will be deleted! Release 'Delete' key to prevent this!");
+				while (Time.time < time + 4 && !released) {
+					if (Input.GetKeyUp (KeyCode.Delete)) {
+						released = true;
+					}
+					yield return null;
+				}
+
+				if (Input.GetKey (KeyCode.Delete) && !released) {
+					SaveLoad.resetSaveGame (m_SelectedFile);
+					Debug.Log ("Save " + (m_SelectedFile + 1) + " was deleted!");
+
+					yield return new WaitForSeconds (1f);
+
+					SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+				} else {
+					Debug.Log ("'Delete' key was released!");
+				}
+			}
 			if (Input.GetAxis ("Vertical") > 0) {
 				m_SelectedBtn = (m_SelectedBtn == EButtonType.eBT_Begin ? EButtonType.eBT_End - 1 : m_SelectedBtn - 1);
 				UpdateBtn (m_SelectedBtn);
@@ -209,6 +236,40 @@ public class MainMenuHandlerV2 : MonoBehaviour {
 			}
 			yield return new WaitForSeconds (0.15f);
 
+		}
+	}
+
+	private IEnumerator ButtonSelect (EButtonType btn) {
+		switch (btn) {
+		case EButtonType.eBT_Continue:
+			yield return StartCoroutine (ScreenFade.main.Fade (false, 0.4f));
+
+			SaveData.currentSave = SaveLoad.savedGames [m_SelectedFile];
+			SceneManager.LoadScene (SaveData.currentSave.levelName);
+			break;
+		case EButtonType.eBT_NewGame:
+			yield return StartCoroutine (ScreenFade.main.Fade (false, 0.4f));
+
+			SaveData.currentSave = new SaveData (m_FileCount);
+
+			GlobalVariables.global.SetDEBUGFileData ();
+
+			GlobalVariables.global.playerPosition = new Vector3 (78, 0, 29);
+			GlobalVariables.global.playerDirection = 2;
+			GlobalVariables.global.fadeIn = true;
+			SceneManager.LoadScene ("indoorsNW");
+			break;
+		case EButtonType.eBT_Settings:
+			yield return StartCoroutine (ScreenFade.main.Fade (false, 0.4f));
+
+			Scene.main.Settings.gameObject.SetActive (true);
+			StartCoroutine (Scene.main.Settings.control ());
+			while (Scene.main.Settings.gameObject.activeSelf) {
+				yield return null;
+			}
+
+			yield return StartCoroutine (ScreenFade.main.Fade (true, 0.4f));
+			break;
 		}
 	}
 }
