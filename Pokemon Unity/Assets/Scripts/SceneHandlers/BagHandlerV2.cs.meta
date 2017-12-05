@@ -1,11 +1,16 @@
 fileFormatVersion: 2
 guid: 557d3b76bf484ea4e9a1b086a2913ff9
-timeCreated: 1512120345
+timeCreated: 1512296125
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_kSelectClip: {fileID: 8300000, guid: 02766f301753af9469c46d685fb3d48c, type: 3}
+  - m_kHealClip: {fileID: 8300000, guid: 4e3246179322430459432ab7176e7e86, type: 3}
+  - m_kTMBootupClip: {fileID: 8300000, guid: 8d6f822eca4eef34388bf98f099fe2fa, type: 3}
+  - m_kForgetMoveClip: {instanceID: 0}
+  - m_kSaleClip: {fileID: 8300000, guid: d43bed8076231154faddc8a8109f07d3, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

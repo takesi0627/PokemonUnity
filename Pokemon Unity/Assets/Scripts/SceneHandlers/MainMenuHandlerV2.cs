@@ -31,7 +31,7 @@ public class MainMenuHandlerV2 : MonoBehaviour {
 
 	// File Data Components
 	private Image[] m_PokemonImg;
-	[SerializeField] private Sprite[,] m_PokemonAnim;
+	private Sprite[,] m_PokemonAnim;
 	private Text m_FileFields;
 	private Text m_FileDatasText;
 	private Text m_FileMapName;
