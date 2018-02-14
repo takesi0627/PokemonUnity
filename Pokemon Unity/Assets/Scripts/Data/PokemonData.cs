@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PokemonData
 {
@@ -93,12 +94,7 @@ public class PokemonData
     private int baseExpYield;
     private LevelingRate levelingRate;
 
-    private int evYieldHP;
-    private int evYieldATK;
-    private int evYieldDEF;
-    private int evYieldSPA;
-    private int evYieldSPD;
-    private int evYieldSPE;
+    private Dictionary <GameDataType.EVYeildType, short> evYeilds;
 
     private PokedexColor pokedexColor;
     private int baseFriendship;
@@ -106,12 +102,7 @@ public class PokemonData
     private string species;
     private string pokedexEntry;
 
-    private int baseStatsHP;
-    private int baseStatsATK;
-    private int baseStatsDEF;
-    private int baseStatsSPA;
-    private int baseStatsSPD;
-    private int baseStatsSPE;
+    private Dictionary <GameDataType.BaseStatsType, short> baseStats;
 
     private float luminance;
     private Color lightColor;
@@ -205,12 +196,12 @@ public class PokemonData
         this.baseExpYield = baseExpYield;
         this.levelingRate = levelingRate;
 
-        this.evYieldHP = evYieldHP;
-        this.evYieldATK = evYieldATK;
-        this.evYieldDEF = evYieldDEF;
-        this.evYieldSPA = evYieldSPA;
-        this.evYieldSPD = evYieldSPD;
-        this.evYieldSPE = evYieldSPE;
+        this.evYeilds.Add (GameDataType.EVYeildType.HP,  (short)evYieldHP);
+        this.evYeilds.Add (GameDataType.EVYeildType.ATK, (short)evYieldATK);
+        this.evYeilds.Add (GameDataType.EVYeildType.DEF, (short)evYieldDEF);
+        this.evYeilds.Add (GameDataType.EVYeildType.SPA, (short)evYieldSPA);
+        this.evYeilds.Add (GameDataType.EVYeildType.SPD, (short)evYieldSPD);
+        this.evYeilds.Add (GameDataType.EVYeildType.SPE, (short)evYieldSPE);
 
         this.pokedexColor = pokedexColor;
         this.baseFriendship = baseFriendship;
@@ -218,13 +209,13 @@ public class PokemonData
         this.species = species;
         this.pokedexEntry = pokedexEntry;
 
-        this.baseStatsHP = baseStatsHP;
-        this.baseStatsATK = baseStatsATK;
-        this.baseStatsDEF = baseStatsDEF;
-        this.baseStatsSPA = baseStatsSPA;
-        this.baseStatsSPD = baseStatsSPD;
-        this.baseStatsSPE = baseStatsSPE;
-
+        this.baseStats.Add (GameDataType.BaseStatsType.HP, (short)baseStatsHP);
+        this.baseStats.Add (GameDataType.BaseStatsType.ATK, (short)baseStatsATK);
+        this.baseStats.Add (GameDataType.BaseStatsType.DEF, (short)baseStatsDEF);
+        this.baseStats.Add (GameDataType.BaseStatsType.SPA, (short)baseStatsSPA);
+        this.baseStats.Add (GameDataType.BaseStatsType.SPD, (short)baseStatsSPD);
+        this.baseStats.Add (GameDataType.BaseStatsType.SPE, (short)baseStatsSPE);
+        
         this.luminance = luminance;
         this.lightColor = lightColor;
 

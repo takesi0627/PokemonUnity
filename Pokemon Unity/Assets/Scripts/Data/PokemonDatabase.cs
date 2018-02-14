@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 //The Database is incomplete. Many Pokémon have not been programmed in. If you wish to add a Pokémon's data
 //  to the database, ensure that it is placed in the correct position for it's ID.
@@ -2026,8 +2027,55 @@ public static class PokemonDatabase
         1160499, 1214753, 1254796, 1312322, 1354652, 1415577, 1460276, 1524731, 1571884, 1640000
     };
 
-    public static void LoadData () {
+    public static bool Deserialize (string [] stream) {
+        int idx = 0;
+        int ID, catchRate, hatchTime, baseExpYield, baseFriendship;
+        int baseStatsHP, baseStatsATK, baseStatsDEF, baseStatsSPA, baseStatsSPD, baseStatsSPE;        
+        string name, ability1, ability2, hiddenAbility, species, pokedexEntry;
+        PokemonData.Type type1, type2;
+        PokemonData.EggGroup eggGroup1, eggGroup2;
+        PokemonData.LevelingRate levelingRate;
+        float maleRatio, height, weight, luminance;
+        PokemonData.PokedexColor pokedexColor;
+        Color lightColor;
+        int[] movesetLevels, evolutionID, evYields = {}; 
+        string[] movesetMoves, tmList, evolutionRequirements;
+        short eggCycles;
 
+        ID = GameData.GetIntFromStream (stream, idx++);
+
+        if (Pokedex.ContainsKey (ID)) {
+            Debug.LogError ("[ERROR] Pokedex.ini Duplicate Key!" + ID);
+            return false;
+        }
+
+        type1           = (PokemonData.Type) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.Type));
+        type2           = (PokemonData.Type) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.Type));
+        ability1        = GameData.GetStrFromStream (stream, idx++);
+        ability2        = GameData.GetStrFromStream (stream, idx++);
+        hiddenAbility   = GameData.GetStrFromStream (stream, idx++);
+        maleRatio       = Convert.ToSingle (stream.GetValue (idx++).ToString ());
+        catchRate       = Utilities.ParseFast (stream.GetValue (idx++).ToString ());
+        eggGroup1       = (PokemonData.EggGroup) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.EggGroup));
+        eggGroup2       = (PokemonData.EggGroup) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.EggGroup));
+        eggCycles       = (short)GameData.GetIntFromStream (stream, idx++);
+        height          = GameData.GetFloatFromStream (stream, idx++);
+        weight          = GameData.GetFloatFromStream (stream, idx++);
+        baseExpYield    = GameData.GetIntFromStream (stream, idx++);
+        levelingRate    = (PokemonData.LevelingRate) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.LevelingRate));
+
+        string evTemp = GameData.GetStrFromStream (stream, idx++);
+        Array.Resize (ref evYields, Enum.GetNames (typeof (GameDataType.EVYeildType)).Length);
+        foreach (GameDataType.EVYeildType type in Enum.GetValues (typeof (GameDataType.EVYeildType))) {
+            evYields.SetValue (GameData.GetIntFromStream (stream, (int)type), (int)type);
+        }
+
+        pokedexColor    = (PokemonData.PokedexColor) GameData.GetEnumFromStream (stream, idx++, typeof (PokemonData.PokedexColor));
+        baseFriendship  = GameData.GetIntFromStream (stream, idx++);
+        species         = GameData.GetStrFromStream (stream, idx++);
+        pokedexEntry    = GameData.GetStrFromStream (stream, idx++);
+
+        return true;
     }
 
     public static PokemonData getPokemon (int ID)
@@ -2039,20 +2087,6 @@ public static class PokemonDatabase
         else {
             return null;
         }
-        // int i = 1;
-        // while (result == null)
-        // {
-        //     if (pokedex[i].getID() == ID)
-        //     {
-        //         result = pokedex[i];
-        //     }
-        //     i += 1;
-        //     if (i >= pokedex.Length)
-        //     {
-        //         return null;
-        //     }
-        // }
-        // return result;
     }
 
     public static int getLevelExp(PokemonData.LevelingRate levelingRate, int currentLevel)
