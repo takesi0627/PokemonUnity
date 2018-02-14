@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //The Database is incomplete. Many Pokémon have not been programmed in. If you wish to add a Pokémon's data
 //  to the database, ensure that it is placed in the correct position for it's ID.
@@ -10,7 +11,8 @@ using System.Collections;
 
 public static class PokemonDatabase
 {
-    private static PokemonData[] pokedex = new PokemonData[]
+    private static Dictionary <int, PokemonData> Pokedex;
+    /*private static PokemonData[] pokedex = new PokemonData[]
     {
         null,
         //  PokemonData(ID, NAME, PokemonData.Type.TYPE1, PokemonData.Type.TYPE1, Ability1, Ability2, HiddenAbility,
@@ -1939,8 +1941,7 @@ public static class PokemonDatabase
             new string[] {},
             new int[] {}, new string[] {})
     };
-
-
+    */
     private static int[] expTableErratic = new int[]
     {
         0, 15, 52, 122, 237, 406, 637, 942, 1326, 1800,
@@ -2025,23 +2026,33 @@ public static class PokemonDatabase
         1160499, 1214753, 1254796, 1312322, 1354652, 1415577, 1460276, 1524731, 1571884, 1640000
     };
 
-    public static PokemonData getPokemon(int ID)
+    public static void LoadData () {
+
+    }
+
+    public static PokemonData getPokemon (int ID)
     {
         PokemonData result = null;
-        int i = 1;
-        while (result == null)
-        {
-            if (pokedex[i].getID() == ID)
-            {
-                result = pokedex[i];
-            }
-            i += 1;
-            if (i >= pokedex.Length)
-            {
-                return null;
-            }
+        if (Pokedex.TryGetValue (ID, out result)) {
+            return result;
         }
-        return result;
+        else {
+            return null;
+        }
+        // int i = 1;
+        // while (result == null)
+        // {
+        //     if (pokedex[i].getID() == ID)
+        //     {
+        //         result = pokedex[i];
+        //     }
+        //     i += 1;
+        //     if (i >= pokedex.Length)
+        //     {
+        //         return null;
+        //     }
+        // }
+        // return result;
     }
 
     public static int getLevelExp(PokemonData.LevelingRate levelingRate, int currentLevel)
